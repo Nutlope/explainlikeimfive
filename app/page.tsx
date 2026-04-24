@@ -7,6 +7,7 @@ import { SEEDED_POSTS } from "@/lib/seed-posts";
 import type { Comment, Post, ReplyErrorPayload, ReplyPayload } from "@/lib/types";
 
 const STORAGE_KEY = "eli5-agent-posts:v1";
+const REPLY_REQUEST_STAGGER_MS = 450;
 
 type RepliesResponse = {
   replies?: ReplyPayload[];
@@ -57,6 +58,10 @@ function safeStoredPosts(value: string | null) {
   }
 }
 
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default function Home() {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
@@ -102,55 +107,7 @@ export default function Home() {
   }, [searchQuery, sort, userPosts]);
 
   async function requestReplies(postId: string, questionTitle: string) {
-    try {
-      const response = await fetch("/api/replies", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title: questionTitle }),
-      });
-
-      const data = (await response.json().catch(() => ({}))) as RepliesResponse;
-      const replies = data.replies ?? [];
-      const errors = data.errors ?? [];
-
-      setUserPosts((currentPosts) =>
-        currentPosts.map((post) => {
-          if (post.id !== postId) {
-            return post;
-          }
-
-          const comments = post.comments.map((comment) => {
-            if (comment.status !== "loading" || !comment.modelId) {
-              return comment;
-            }
-
-            const reply = replies.find((item) => item.modelId === comment.modelId);
-            const error = errors.find((item) => item.modelId === comment.modelId);
-
-            if (reply) {
-              return {
-                ...comment,
-                body: reply.content,
-                status: "ready" as const,
-              };
-            }
-
-            return {
-              ...comment,
-              body: error?.error ?? "This model did not return a reply. Try posting again in a moment.",
-              status: "error" as const,
-            };
-          });
-
-          return {
-            ...post,
-            comments,
-          };
-        }),
-      );
-    } catch {
+    function updateModelComment(modelId: string, body: string, status: "error" | "ready") {
       setUserPosts((currentPosts) =>
         currentPosts.map((post) => {
           if (post.id !== postId) {
@@ -160,11 +117,11 @@ export default function Home() {
           return {
             ...post,
             comments: post.comments.map((comment) =>
-              comment.status === "loading"
+              comment.modelId === modelId && comment.status === "loading"
                 ? {
                     ...comment,
-                    status: "error" as const,
-                    body: "Could not reach the reply service. Check the dev server and try again.",
+                    body,
+                    status,
                   }
                 : comment,
             ),
@@ -172,6 +129,39 @@ export default function Home() {
         }),
       );
     }
+
+    await Promise.all(
+      AI_MODELS.map(async (model, index) => {
+        await wait(index * REPLY_REQUEST_STAGGER_MS);
+
+        try {
+          const response = await fetch("/api/replies", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ modelId: model.id, title: questionTitle }),
+          });
+
+          const data = (await response.json().catch(() => ({}))) as RepliesResponse;
+          const reply = data.replies?.find((item) => item.modelId === model.id);
+          const error = data.errors?.find((item) => item.modelId === model.id);
+
+          if (reply) {
+            updateModelComment(model.id, reply.content, "ready");
+            return;
+          }
+
+          updateModelComment(
+            model.id,
+            error?.error ?? "This model did not return a reply. Try posting again in a moment.",
+            "error",
+          );
+        } catch {
+          updateModelComment(model.id, "Could not reach the reply service. Check the dev server and try again.", "error");
+        }
+      }),
+    );
   }
 
   function submitPost(event: FormEvent<HTMLFormElement>) {
@@ -357,6 +347,12 @@ function Composer({
         id="post-title"
         maxLength={280}
         onChange={(event) => onTitleChange(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            event.currentTarget.form?.requestSubmit();
+          }
+        }}
         placeholder="ELI5: Why does..."
         rows={3}
         value={title}
