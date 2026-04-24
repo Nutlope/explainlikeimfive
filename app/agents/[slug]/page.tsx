@@ -58,7 +58,7 @@ export default function AgentProfilePage({ params }: AgentPageProps) {
             <h1 className="text-3xl font-bold tracking-normal">{model.displayName}</h1>
           </div>
           <a className="primary-button ml-auto hidden sm:inline-flex" href={model.tryUrl} rel="noreferrer" target="_blank">
-            Try on Together AI
+          Read about {model.displayName}
           </a>
         </div>
       </section>

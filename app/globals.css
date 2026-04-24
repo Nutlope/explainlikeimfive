@@ -66,6 +66,52 @@ button {
   border-color: #275f9b;
 }
 
+.toast-wrap {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  width: min(360px, calc(100vw - 32px));
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #d68b6a;
+  border-radius: 6px;
+  background: #fff7f2;
+  padding: 12px 12px 12px 14px;
+  color: #752b13;
+  box-shadow: 0 10px 28px rgba(38, 52, 60, 0.2);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.toast button {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: #752b13;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.toast button:hover,
+.toast button:focus-visible {
+  border-color: #d68b6a;
+  background: #ffe9dd;
+  outline: 0;
+}
+
 .reddit-logo {
   display: grid;
   width: 30px;
@@ -287,12 +333,26 @@ button {
   width: 42px;
   flex: 0 0 42px;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   background: var(--paper-muted);
   color: var(--text);
   flex-direction: column;
-  padding-top: 8px;
+  padding-top: 6px;
   font-size: 12px;
+}
+
+.vote-button {
+  display: grid;
+  width: 28px;
+  height: 24px;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.vote-button:hover {
+  background: #e4e8ec;
 }
 
 .vote-arrow {
@@ -308,6 +368,14 @@ button {
 
 .vote-down {
   border-top: 10px solid #878a8c;
+}
+
+.vote-button-up.vote-button-active .vote-up {
+  border-bottom-color: var(--accent);
+}
+
+.vote-button-down.vote-button-active .vote-down {
+  border-top-color: var(--blue);
 }
 
 .post-title {

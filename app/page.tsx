@@ -7,6 +7,7 @@ import { SEEDED_POSTS } from "@/lib/seed-posts";
 import type { Comment, Post, ReplyErrorPayload, ReplyPayload } from "@/lib/types";
 
 const STORAGE_KEY = "eli5-agent-posts:v1";
+const SEEDED_VOTES_STORAGE_KEY = "eli5-seeded-post-votes:v1";
 const REPLY_REQUEST_STAGGER_MS = 450;
 
 type RepliesResponse = {
@@ -58,32 +59,62 @@ function safeStoredPosts(value: string | null) {
   }
 }
 
+function safeStoredVotes(value: string | null) {
+  if (!value) {
+    return {};
+  }
+
+  try {
+    const parsed = JSON.parse(value) as Record<string, -1 | 0 | 1>;
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
 function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export default function Home() {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
+  const [seededVotes, setSeededVotes] = useState<Record<string, -1 | 0 | 1>>({});
   const [hasLoadedStorage, setHasLoadedStorage] = useState(false);
   const [isComposerOpen, setComposerOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [formError, setFormError] = useState("");
   const [sort, setSort] = useState<"hot" | "new" | "top">("hot");
   const [searchQuery, setSearchQuery] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
     setUserPosts(safeStoredPosts(localStorage.getItem(STORAGE_KEY)));
+    setSeededVotes(safeStoredVotes(localStorage.getItem(SEEDED_VOTES_STORAGE_KEY)));
     setHasLoadedStorage(true);
   }, []);
 
   useEffect(() => {
     if (hasLoadedStorage) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(userPosts));
+      localStorage.setItem(SEEDED_VOTES_STORAGE_KEY, JSON.stringify(seededVotes));
     }
-  }, [hasLoadedStorage, userPosts]);
+  }, [hasLoadedStorage, seededVotes, userPosts]);
+
+  useEffect(() => {
+    if (!toastMessage) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setToastMessage(""), 5200);
+    return () => window.clearTimeout(timeout);
+  }, [toastMessage]);
 
   const posts = useMemo(() => {
-    const allPosts = [...userPosts, ...SEEDED_POSTS];
+    const votedSeedPosts = SEEDED_POSTS.map((post) => ({
+      ...post,
+      vote: seededVotes[post.id] ?? 0,
+    }));
+    const allPosts = [...userPosts, ...votedSeedPosts];
     const query = searchQuery.trim().toLowerCase();
     const filteredPosts = query
       ? allPosts.filter((post) => {
@@ -104,9 +135,38 @@ export default function Home() {
     }
 
     return filteredPosts;
-  }, [searchQuery, sort, userPosts]);
+  }, [searchQuery, seededVotes, sort, userPosts]);
+
+  function handlePostVote(postId: string, nextVote: -1 | 1) {
+    const applyVote = (post: Post): Post => {
+      const currentVote = post.vote ?? 0;
+      const vote = currentVote === nextVote ? 0 : nextVote;
+
+      return {
+        ...post,
+        vote,
+      };
+    };
+
+    if (userPosts.some((post) => post.id === postId)) {
+      setUserPosts((currentPosts) => currentPosts.map((post) => (post.id === postId ? applyVote(post) : post)));
+      return;
+    }
+
+    setSeededVotes((currentVotes) => {
+      const currentVote = currentVotes[postId] ?? 0;
+      const vote = currentVote === nextVote ? 0 : nextVote;
+
+      return {
+        ...currentVotes,
+        [postId]: vote,
+      };
+    });
+  }
 
   async function requestReplies(postId: string, questionTitle: string) {
+    let hasShownCreditToast = false;
+
     function updateModelComment(modelId: string, body: string, status: "error" | "ready") {
       setUserPosts((currentPosts) =>
         currentPosts.map((post) => {
@@ -142,6 +202,16 @@ export default function Home() {
             },
             body: JSON.stringify({ modelId: model.id, title: questionTitle }),
           });
+
+          if (response.status === 429) {
+            if (!hasShownCreditToast) {
+              hasShownCreditToast = true;
+              setToastMessage("You are out of credits for now. Try again after your rate limit resets.");
+            }
+
+            updateModelComment(model.id, "You are out of credits for now. Try again after your rate limit resets.", "error");
+            return;
+          }
 
           const data = (await response.json().catch(() => ({}))) as RepliesResponse;
           const reply = data.replies?.find((item) => item.modelId === model.id);
@@ -198,6 +268,7 @@ export default function Home() {
         onSearchChange={setSearchQuery}
         searchQuery={searchQuery}
       />
+      <Toast message={toastMessage} onDismiss={() => setToastMessage("")} />
 
       <section className="subreddit-banner">
         <div className="banner-art" />
@@ -248,7 +319,7 @@ export default function Home() {
           {posts.length ? (
             <div className="flex flex-col gap-3">
               {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
+                <PostCard key={post.id} onVote={handlePostVote} post={post} />
               ))}
             </div>
           ) : (
@@ -265,6 +336,23 @@ export default function Home() {
         <Sidebar onCreate={() => setComposerOpen(true)} />
       </div>
     </main>
+  );
+}
+
+function Toast({ message, onDismiss }: { message: string; onDismiss: () => void }) {
+  if (!message) {
+    return null;
+  }
+
+  return (
+    <div aria-live="polite" className="toast-wrap" role="status">
+      <div className="toast">
+        <span>{message}</span>
+        <button aria-label="Dismiss notification" onClick={onDismiss} type="button">
+          x
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -369,10 +457,10 @@ function Composer({
   );
 }
 
-function PostCard({ post }: { post: Post }) {
+function PostCard({ onVote, post }: { onVote: (postId: string, vote: -1 | 1) => void; post: Post }) {
   return (
     <article className="post-card">
-      <VoteRail score={post.score} />
+      <VoteRail onVote={(vote) => onVote(post.id, vote)} score={post.score + (post.vote ?? 0)} vote={post.vote ?? 0} />
       <div className="min-w-0 flex-1 py-2 pr-3">
         <div className="mb-1 text-xs text-reddit-muted">
           Posted by u/{post.author} <span aria-hidden="true">.</span> {post.createdAt}
@@ -393,12 +481,34 @@ function PostCard({ post }: { post: Post }) {
   );
 }
 
-function VoteRail({ score }: { score: number }) {
+function VoteRail({
+  onVote,
+  score,
+  vote,
+}: {
+  onVote: (vote: -1 | 1) => void;
+  score: number;
+  vote: -1 | 0 | 1;
+}) {
   return (
     <div className="vote-rail" aria-label={`${score} upvotes`}>
-      <span className="vote-arrow vote-up" />
+      <button
+        aria-label={vote === 1 ? "Remove upvote" : "Upvote post"}
+        className={vote === 1 ? "vote-button vote-button-up vote-button-active" : "vote-button vote-button-up"}
+        onClick={() => onVote(1)}
+        type="button"
+      >
+        <span className="vote-arrow vote-up" />
+      </button>
       <strong>{formatScore(score)}</strong>
-      <span className="vote-arrow vote-down" />
+      <button
+        aria-label={vote === -1 ? "Remove downvote" : "Downvote post"}
+        className={vote === -1 ? "vote-button vote-button-down vote-button-active" : "vote-button vote-button-down"}
+        onClick={() => onVote(-1)}
+        type="button"
+      >
+        <span className="vote-arrow vote-down" />
+      </button>
     </div>
   );
 }
@@ -453,7 +563,7 @@ function ModelName({
         <span className="model-card-body">{model.summary}</span>
         <span className="model-card-body">{model.responseStyle}</span>
         <a href={model.tryUrl} rel="noreferrer" target="_blank">
-          Try on Together AI
+          Read about {model.displayName}
         </a>
       </span>
     </span>

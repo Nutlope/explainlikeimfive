@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { limitMessages } from "@/lib/limits";
 import { AI_MODELS } from "@/lib/models";
 import type { ReplyErrorPayload, ReplyPayload } from "@/lib/types";
 
@@ -363,6 +364,19 @@ export async function POST(request: Request) {
   }
 
   const modelsToAsk = requestedModel ? [requestedModel] : AI_MODELS;
+  const errorResolved = request.headers.get("X-Auto-Error-Resolved");
+  const ip = request.headers.get("x-forwarded-for") || "unknown";
+
+  try {
+    if (!errorResolved) {
+      await limitMessages(ip);
+    }
+  } catch {
+    return new Response("Too many messages. Daily limit reached.", {
+      status: 429,
+    });
+  }
+
   const settled = await Promise.allSettled(modelsToAsk.map((model) => askTogether(model.id, model.displayName, title)));
 
   const replies: ReplyPayload[] = [];

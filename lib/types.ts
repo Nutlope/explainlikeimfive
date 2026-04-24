@@ -28,6 +28,7 @@ export type Post = {
   author: string;
   createdAt: string;
   score: number;
+  vote?: -1 | 0 | 1;
   comments: Comment[];
   isUserPost?: boolean;
 };
