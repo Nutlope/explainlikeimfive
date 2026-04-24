@@ -164,6 +164,16 @@ export default function Home() {
     });
   }
 
+  function handleDeletePost(postId: string) {
+    const shouldDelete = window.confirm("Delete this post and its replies?");
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    setUserPosts((currentPosts) => currentPosts.filter((post) => post.id !== postId));
+  }
+
   async function requestReplies(postId: string, questionTitle: string) {
     let hasShownCreditToast = false;
 
@@ -319,7 +329,7 @@ export default function Home() {
           {posts.length ? (
             <div className="flex flex-col gap-3">
               {posts.map((post) => (
-                <PostCard key={post.id} onVote={handlePostVote} post={post} />
+                <PostCard key={post.id} onDelete={handleDeletePost} onVote={handlePostVote} post={post} />
               ))}
             </div>
           ) : (
@@ -457,7 +467,15 @@ function Composer({
   );
 }
 
-function PostCard({ onVote, post }: { onVote: (postId: string, vote: -1 | 1) => void; post: Post }) {
+function PostCard({
+  onDelete,
+  onVote,
+  post,
+}: {
+  onDelete: (postId: string) => void;
+  onVote: (postId: string, vote: -1 | 1) => void;
+  post: Post;
+}) {
   return (
     <article className="post-card">
       <VoteRail onVote={(vote) => onVote(post.id, vote)} score={post.score + (post.vote ?? 0)} vote={post.vote ?? 0} />
@@ -470,6 +488,11 @@ function PostCard({ onVote, post }: { onVote: (postId: string, vote: -1 | 1) => 
           <span>{post.comments.length} comments</span>
           <span>Share</span>
           <span>Save</span>
+          {post.isUserPost ? (
+            <button className="post-action-button post-action-danger" onClick={() => onDelete(post.id)} type="button">
+              Delete
+            </button>
+          ) : null}
         </div>
         <div className="comments">
           {post.comments.map((comment) => (

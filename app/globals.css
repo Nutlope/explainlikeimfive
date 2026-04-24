@@ -389,11 +389,33 @@ button {
 .post-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 16px;
   margin-top: 10px;
   color: var(--muted);
   font-size: 12px;
   font-weight: 800;
+}
+
+.post-action-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.post-action-button:hover,
+.post-action-button:focus-visible {
+  color: var(--blue);
+  text-decoration: underline;
+  outline: 0;
+}
+
+.post-action-danger:hover,
+.post-action-danger:focus-visible {
+  color: #a72a00;
 }
 
 .comments {
