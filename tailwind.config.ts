@@ -10,9 +10,9 @@ const config: Config = {
     extend: {
       colors: {
         reddit: {
-          orange: "#ff4500",
-          blue: "#0079d3",
-          bg: "#dae0e6",
+          orange: "#31596b",
+          blue: "#2f6fb2",
+          bg: "#dfe5ea",
           line: "#cccfd4",
           text: "#1a1a1b",
           muted: "#576f76",

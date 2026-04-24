@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "r/explainlikeim5",
+  title: "r/explainlikeimfive",
   description: "A Reddit-inspired ELI5 board where multiple Together AI models answer your questions.",
 };
 

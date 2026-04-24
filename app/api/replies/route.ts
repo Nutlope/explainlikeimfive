@@ -18,7 +18,7 @@ type TogetherResponse = {
   };
 };
 
-const BASE_SYSTEM_PROMPT = `You are answering in the spirit of r/explainlikeim5.
+const BASE_SYSTEM_PROMPT = `You are answering in the spirit of r/explainlikeimfive.
 Use simple, precise language without talking down to the reader.
 Answer in 2-4 short paragraphs.
 Use one concrete analogy.
@@ -40,7 +40,7 @@ const MODEL_STYLE_PROMPTS: Record<string, string> = {
   "zai-org/GLM-5.1": "Style for this reply: write entirely in lowercase, including the first word of sentences.",
   "moonshotai/Kimi-K2.6":
     "Style for this reply: be super succinct. Answer in exactly one short paragraph, ideally 3-5 sentences.",
-  "MiniMaxAI/MiniMax-M2.7": "Style for this reply: answer normally in the r/explainlikeim5 style.",
+  "MiniMaxAI/MiniMax-M2.7": "Style for this reply: answer normally in the r/explainlikeimfive style.",
 };
 
 function systemPromptForModel(modelId: string) {

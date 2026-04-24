@@ -10,8 +10,10 @@
   --line-strong: #cccfd4;
   --text: #1a1a1b;
   --muted: #576f76;
-  --orange: #ff4500;
-  --blue: #0079d3;
+  --orange: #31596b;
+  --blue: #2f6fb2;
+  --accent: #d06f43;
+  --chalk: #26343c;
 }
 
 * {
@@ -20,7 +22,7 @@
 
 body {
   margin: 0;
-  background: #dae0e6;
+  background: #dfe5ea;
   color: var(--text);
   font-family:
     "Trebuchet MS",
@@ -60,8 +62,8 @@ button {
 }
 
 .primary-button:hover {
-  background: #1484d6;
-  border-color: #1484d6;
+  background: #275f9b;
+  border-color: #275f9b;
 }
 
 .reddit-logo {
@@ -70,9 +72,10 @@ button {
   height: 30px;
   place-items: center;
   border-radius: 999px;
-  background: var(--orange);
-  color: #ffffff;
-  font-size: 20px;
+  border: 1px solid #c8d4db;
+  background: #f3f7f8;
+  color: var(--orange);
+  font-size: 18px;
   font-weight: 900;
 }
 
@@ -84,9 +87,9 @@ button {
 .search-form input {
   width: 100%;
   height: 36px;
-  border: 1px solid var(--line);
+  border: 1px solid #d9e0e5;
   border-radius: 4px;
-  background: var(--paper-muted);
+  background: #f8fafb;
   padding: 0 12px;
   color: var(--text);
   font-size: 14px;
@@ -101,27 +104,30 @@ button {
 
 .subreddit-banner {
   background: var(--paper);
-  border-bottom: 1px solid var(--line-strong);
+  border-bottom: 1px solid #d7dde2;
 }
 
 .banner-art {
-  height: 78px;
+  height: 72px;
   background:
-    linear-gradient(90deg, rgba(0, 121, 211, 0.92), rgba(0, 121, 211, 0.68)),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0 10px, transparent 10px 22px);
+    linear-gradient(90deg, rgba(45, 91, 125, 0.92), rgba(75, 126, 162, 0.82)),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0 9px, transparent 9px 22px);
 }
 
 .community-mark {
   display: grid;
-  width: 72px;
-  height: 72px;
-  margin-top: -32px;
+  width: 68px;
+  height: 68px;
+  margin-top: -30px;
   place-items: center;
   border: 4px solid var(--paper);
   border-radius: 999px;
-  background: var(--orange);
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.08), transparent 34%),
+    var(--chalk);
   color: #ffffff;
-  font-size: 24px;
+  box-shadow: 0 2px 8px rgba(38, 52, 60, 0.18);
+  font-size: 23px;
   font-weight: 900;
 }
 
@@ -501,6 +507,16 @@ button {
   line-height: 1.45;
 }
 
+.sidebar-link {
+  color: var(--blue);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  text-decoration: underline;
+}
+
 .secondary-pill {
   display: inline-flex;
   width: 100%;
@@ -564,8 +580,8 @@ button {
 .agent-profile-art {
   height: 94px;
   background:
-    linear-gradient(90deg, rgba(255, 69, 0, 0.9), rgba(0, 121, 211, 0.8)),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0 9px, transparent 9px 22px);
+    linear-gradient(90deg, rgba(38, 52, 60, 0.94), rgba(47, 111, 178, 0.76)),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0 9px, transparent 9px 22px);
 }
 
 .agent-profile-avatar {

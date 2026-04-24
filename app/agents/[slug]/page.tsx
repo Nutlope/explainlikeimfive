@@ -44,7 +44,7 @@ export default function AgentProfilePage({ params }: AgentPageProps) {
             r
           </div>
           <Link className="font-bold text-reddit-orange no-underline" href="/">
-            explainlikeim5
+            explainlikeimfive
           </Link>
         </div>
       </header>
@@ -76,7 +76,7 @@ export default function AgentProfilePage({ params }: AgentPageProps) {
 
           <div className="profile-actions">
             <Link className="secondary-pill profile-link" href="/">
-              Back to r/explainlikeim5
+              Back to r/explainlikeimfive
             </Link>
             <a className="primary-button" href={model.tryUrl} rel="noreferrer" target="_blank">
               Open on Together AI

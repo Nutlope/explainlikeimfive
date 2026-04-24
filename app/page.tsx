@@ -214,8 +214,8 @@ export default function Home() {
         <div className="mx-auto flex max-w-6xl items-end gap-4 px-4 pb-4">
           <div className="community-mark">e5</div>
           <div className="min-w-0 pb-1">
-            <h1 className="text-2xl font-bold tracking-normal sm:text-3xl">r/explainlikeim5</h1>
-            <p className="text-sm text-reddit-muted">Explain Like I&apos;m Five, answered by three Together AI models.</p>
+            <h1 className="text-2xl font-bold tracking-normal sm:text-3xl">r/explainlikeimfive</h1>
+            <p className="text-sm text-reddit-muted">Explain Like I&apos;m Five, answered by 3 top OSS AI models.</p>
           </div>
           <button className="primary-button ml-auto hidden sm:inline-flex" onClick={() => setComposerOpen(true)}>
             Create Post
@@ -293,15 +293,15 @@ function TopNav({
         <div className="reddit-logo" aria-hidden="true">
           r
         </div>
-        <div className="font-bold text-reddit-orange">explainlikeim5</div>
+        <div className="font-bold text-reddit-orange">explainlikeimfive</div>
         <form className="search-form" onSubmit={(event) => event.preventDefault()}>
           <label className="sr-only" htmlFor="subreddit-search">
-            Search r/explainlikeim5
+            Search r/explainlikeimfive
           </label>
           <input
             id="subreddit-search"
             onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search r/explainlikeim5"
+            placeholder="Search r/explainlikeimfive"
             type="search"
             value={searchQuery}
           />
@@ -470,10 +470,17 @@ function Sidebar({ onCreate }: { onCreate: () => void }) {
       <div className="sidebar-panel">
         <div className="sidebar-header">About Community</div>
         <div className="p-3">
-          <h2 className="mb-2 text-base font-bold">Explain Like I&apos;m Five | Don&apos;t Panic!</h2>
+          <h2 className="mb-2 text-base font-bold">Explain Like I&apos;m Five</h2>
           <p className="text-sm leading-5 text-reddit-muted">
-            r/explainlikeim5 is a friendly place for plain-language answers. Ask one clear question and three
-            Together AI agents will explain it with simple examples.
+            Inspired by the Reddit community{" "}
+            <a className="sidebar-link" href="https://www.reddit.com/r/explainlikeimfive/" rel="noreferrer" target="_blank">
+              r/explainlikeimfive
+            </a>
+            . Ask one clear question and 3 top OSS AI models will explain it, powered by{" "}
+            <a className="sidebar-link underline" href="https://www.together.ai/" rel="noreferrer" target="_blank">
+              Together AI
+            </a>
+            .
           </p>
           <div className="sidebar-meta">
             <span>Created Apr 24, 2026</span>
@@ -504,7 +511,7 @@ function Sidebar({ onCreate }: { onCreate: () => void }) {
           </button>
         </div>
         <div className="sidebar-section border-t border-[#edeff1]">
-          <h3>r/explainlikeim5 rules</h3>
+          <h3>r/explainlikeimfive rules</h3>
           <ol className="rule-list">
             <li>Be civil</li>
             <li>Ask for objective explanations</li>
