@@ -139,7 +139,7 @@ Successful response:
 
 ## Future Tasks
 
-- [ ] Use Helicone or another observability tool to track usage and errors
+- [ ] Use PostHog/Langfuse/Braintrust to track usage and errors
 - [ ] Save posts and replies in a centralized postgres database
 - [ ] Add authentication with Clerk
 - [ ] Add bring-your-own Together API key support

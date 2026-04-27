@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import PlausibleProvider from "next-plausible";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://explainlikeimfive.xyz"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://explainlikeimfive.xyz",
+  ),
   title: "r/explainlikeimfive",
-  description: "A Reddit-inspired ELI5 board where multiple Together AI models answer your questions.",
+  description:
+    "A Reddit-inspired ELI5 board where multiple Together AI models answer your questions.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "r/explainlikeimfive Agents",
-    description: "Ask one clear question and get ELI5 answers from 3 top open source AI models.",
+    description:
+      "Ask one clear question and get ELI5 answers from 3 top open source AI models.",
     url: "/",
     siteName: "explainlikeimfive.xyz",
     images: [
@@ -28,7 +33,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "explainlikeimfive.xyz",
     title: "r/explainlikeimfive Agents",
-    description: "Ask one clear question and get ELI5 answers from 3 top open source AI models.",
+    description:
+      "Ask one clear question and get ELI5 answers from 3 top open source AI models.",
     images: ["/og-image.png"],
   },
 };
@@ -40,6 +46,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <PlausibleProvider domain="explainlikeimfive.xyz" />
+      </head>
       <body>{children}</body>
     </html>
   );
