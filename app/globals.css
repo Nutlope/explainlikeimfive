@@ -173,8 +173,9 @@ button {
     var(--chalk);
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(38, 52, 60, 0.18);
-  font-size: 23px;
+  font-size: 18px;
   font-weight: 900;
+  line-height: 1;
 }
 
 .create-prompt {
@@ -328,6 +329,10 @@ button {
   border-color: #898989;
 }
 
+.post-content {
+  padding: 14px 16px 16px 18px;
+}
+
 .vote-rail {
   display: flex;
   width: 42px;
@@ -421,15 +426,15 @@ button {
 .comments {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 14px;
+  gap: 14px;
+  margin-top: 18px;
   border-top: 1px solid var(--line);
-  padding-top: 12px;
+  padding-top: 18px;
 }
 
 .comment {
   display: flex;
-  gap: 10px;
+  gap: 14px;
 }
 
 .comment-line {
@@ -662,6 +667,30 @@ button {
   white-space: nowrap;
 }
 
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px solid var(--line-strong);
+  padding: 18px 12px 24px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.app-footer a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.app-footer a:hover,
+.app-footer a:focus-visible {
+  text-decoration: underline;
+  outline: 0;
+}
+
 .agent-profile-banner {
   background: var(--paper);
   border-bottom: 1px solid var(--line-strong);
@@ -765,7 +794,7 @@ button {
   .community-mark {
     width: 58px;
     height: 58px;
-    font-size: 20px;
+    font-size: 15px;
   }
 
   .post-title {
@@ -775,6 +804,10 @@ button {
   .vote-rail {
     width: 36px;
     flex-basis: 36px;
+  }
+
+  .post-content {
+    padding: 12px 12px 14px 14px;
   }
 }
 

@@ -9,6 +9,8 @@ import type { Comment, Post, ReplyErrorPayload, ReplyPayload } from "@/lib/types
 const STORAGE_KEY = "eli5-agent-posts:v1";
 const SEEDED_VOTES_STORAGE_KEY = "eli5-seeded-post-votes:v1";
 const REPLY_REQUEST_STAGGER_MS = 450;
+const GITHUB_REPO_URL = "https://github.com/Nutlope/explainlikeimfive";
+const TOGETHER_URL = "https://www.together.ai/";
 
 type RepliesResponse = {
   replies?: ReplyPayload[];
@@ -274,7 +276,6 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-reddit-bg text-reddit-text">
       <TopNav
-        onCreate={() => setComposerOpen(true)}
         onSearchChange={setSearchQuery}
         searchQuery={searchQuery}
       />
@@ -283,10 +284,10 @@ export default function Home() {
       <section className="subreddit-banner">
         <div className="banner-art" />
         <div className="mx-auto flex max-w-6xl items-end gap-4 px-4 pb-4">
-          <div className="community-mark">e5</div>
+          <div className="community-mark">eli5</div>
           <div className="min-w-0 pb-1">
             <h1 className="text-2xl font-bold tracking-normal sm:text-3xl">r/explainlikeimfive</h1>
-            <p className="text-sm text-reddit-muted">Explain Like I&apos;m Five, answered by 3 top OSS AI models.</p>
+            <p className="text-sm text-reddit-muted">Explain Like I&apos;m Five, answered by 3 top open source AI models.</p>
           </div>
           <button className="primary-button ml-auto hidden sm:inline-flex" onClick={() => setComposerOpen(true)}>
             Create Post
@@ -345,6 +346,7 @@ export default function Home() {
 
         <Sidebar onCreate={() => setComposerOpen(true)} />
       </div>
+      <AppFooter />
     </main>
   );
 }
@@ -367,11 +369,9 @@ function Toast({ message, onDismiss }: { message: string; onDismiss: () => void 
 }
 
 function TopNav({
-  onCreate,
   onSearchChange,
   searchQuery,
 }: {
-  onCreate: () => void;
   onSearchChange: (value: string) => void;
   searchQuery: string;
 }) {
@@ -394,9 +394,6 @@ function TopNav({
             value={searchQuery}
           />
         </form>
-        <button className="primary-button" onClick={onCreate}>
-          Create
-        </button>
       </div>
     </header>
   );
@@ -479,7 +476,7 @@ function PostCard({
   return (
     <article className="post-card">
       <VoteRail onVote={(vote) => onVote(post.id, vote)} score={post.score + (post.vote ?? 0)} vote={post.vote ?? 0} />
-      <div className="min-w-0 flex-1 py-2 pr-3">
+      <div className="post-content min-w-0 flex-1">
         <div className="mb-1 text-xs text-reddit-muted">
           Posted by u/{post.author} <span aria-hidden="true">.</span> {post.createdAt}
         </div>
@@ -605,8 +602,8 @@ function Sidebar({ onCreate }: { onCreate: () => void }) {
             <a className="sidebar-link" href="https://www.reddit.com/r/explainlikeimfive/" rel="noreferrer" target="_blank">
               r/explainlikeimfive
             </a>
-            . Ask one clear question and 3 top OSS AI models will explain it, powered by{" "}
-            <a className="sidebar-link underline" href="https://www.together.ai/" rel="noreferrer" target="_blank">
+            . Ask one clear question and 3 top open source AI models will explain it, powered by{" "}
+            <a className="sidebar-link underline" href={TOGETHER_URL} rel="noreferrer" target="_blank">
               Together AI
             </a>
             .
@@ -633,11 +630,14 @@ function Sidebar({ onCreate }: { onCreate: () => void }) {
 
       <div className="sidebar-panel mt-4">
         <div className="sidebar-section">
-          <h3>Request an explanation</h3>
-          <p>Please search before submitting a post. Keep the title as the question you want explained.</p>
-          <button className="secondary-pill" onClick={onCreate}>
-            Request an explanation
-          </button>
+          <h3>Open Source</h3>
+          <p>
+            Curious how this works? The code is on{" "}
+            <a className="sidebar-link" href={GITHUB_REPO_URL} rel="noreferrer" target="_blank">
+              GitHub
+            </a>
+            .
+          </p>
         </div>
         <div className="sidebar-section border-t border-[#edeff1]">
           <h3>r/explainlikeimfive rules</h3>
@@ -664,5 +664,22 @@ function Sidebar({ onCreate }: { onCreate: () => void }) {
         </div>
       </div>
     </aside>
+  );
+}
+
+function AppFooter() {
+  return (
+    <footer className="app-footer">
+      <span>
+        Powered by{" "}
+        <a href={TOGETHER_URL} rel="noreferrer" target="_blank">
+          Together AI
+        </a>
+      </span>
+      <span aria-hidden="true">.</span>
+      <a href={GITHUB_REPO_URL} rel="noreferrer" target="_blank">
+        View source on GitHub
+      </a>
+    </footer>
   );
 }

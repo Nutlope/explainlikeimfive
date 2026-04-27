@@ -52,6 +52,23 @@ type ExaSearchResponse = {
   error?: string;
 };
 
+type ExaSearchPayload =
+  | {
+      query: string;
+      results: Array<{
+        index: number;
+        title: string;
+        url: string;
+        publishedDate: string | null;
+        author: string | null;
+        highlights: string[];
+        summary: string;
+      }>;
+    }
+  | {
+      error: string;
+    };
+
 const GLM_MODEL_ID = "zai-org/GLM-5.1";
 
 const BASE_SYSTEM_PROMPT = `You are answering in the spirit of r/explainlikeimfive.
@@ -210,6 +227,30 @@ async function searchExa(query: string) {
   return { query, results };
 }
 
+function logWebSearchResult(modelId: string, searchResult: ExaSearchPayload) {
+  if ("error" in searchResult) {
+    console.info("[web_search results]", {
+      modelId,
+      error: searchResult.error,
+    });
+    return;
+  }
+
+  console.info("[web_search results]", {
+    modelId,
+    query: searchResult.query,
+    resultCount: searchResult.results.length,
+    results: searchResult.results.map((result) => ({
+      index: result.index,
+      title: result.title,
+      url: result.url,
+      publishedDate: result.publishedDate,
+      highlights: result.highlights.slice(0, 2),
+      summary: result.summary,
+    })),
+  });
+}
+
 async function askTogether(modelId: string, displayName: string, title: string) {
   const messages: ChatMessage[] = [
     {
@@ -265,6 +306,7 @@ async function askTogether(modelId: string, displayName: string, title: string) 
       }
 
       const searchResult = await searchExa(query);
+      logWebSearchResult(modelId, searchResult);
       messages.push({
         role: "tool",
         tool_call_id: toolCall.id,

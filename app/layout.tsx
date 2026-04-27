@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "r/explainlikeimfive Agents",
-    description: "Ask one clear question and get ELI5 answers from 3 top OSS AI models.",
+    description: "Ask one clear question and get ELI5 answers from 3 top open source AI models.",
     url: "/",
     siteName: "explainlikeimfive.xyz",
     images: [
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "explainlikeimfive.xyz",
     title: "r/explainlikeimfive Agents",
-    description: "Ask one clear question and get ELI5 answers from 3 top OSS AI models.",
+    description: "Ask one clear question and get ELI5 answers from 3 top open source AI models.",
     images: ["/og-image.png"],
   },
 };
