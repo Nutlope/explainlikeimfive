@@ -26,16 +26,16 @@ export const AI_MODELS: AiModel[] = [
     tryUrl: "https://api.together.ai/models/moonshotai/Kimi-K2.6",
   },
   {
-    id: "MiniMaxAI/MiniMax-M2.7",
-    slug: "minimax-m2-7",
-    displayName: "MiniMax M2.7",
+    id: "MiniMaxAI/MiniMax-M2.5",
+    slug: "minimax-m2-5",
+    displayName: "MiniMax M2.5",
     shortName: "MiniMax",
     summary:
-      "MiniMax's M2.7 model on Together, a long-context chat model with efficient serverless inference.",
+      "MiniMax's M2.5 model on Together, a long-context chat model with efficient serverless inference.",
     profile:
-      "MiniMax M2.7 is the normal-format explainer. It gives the roomy version of an ELI5 answer: a little setup, a concrete analogy, and enough detail to make the explanation click.",
+      "MiniMax M2.5 is the normal-format explainer. It gives the roomy version of an ELI5 answer: a little setup, a concrete analogy, and enough detail to make the explanation click.",
     responseStyle: "Replies in the standard r/explainlikeimfive style.",
-    tryUrl: "https://api.together.ai/models/MiniMaxAI/MiniMax-M2.7",
+    tryUrl: "https://api.together.ai/models/MiniMaxAI/MiniMax-M2.5",
   },
 ];
 
