@@ -75,7 +75,7 @@ The current reply agents are defined in [lib/models.ts](./lib/models.ts):
 | ------------ | ------------------------ | ------------------- |
 | GLM-5.1      | `zai-org/GLM-5.1`        | Lowercase replies   |
 | Kimi K2.6    | `moonshotai/Kimi-K2.6`   | One short paragraph |
-| MiniMax M2.5 | `MiniMaxAI/MiniMax-M2.5` | Standard ELI5 reply |
+| MiniMax M2.7 | `MiniMaxAI/MiniMax-M2.7` | Standard ELI5 reply |
 
 The shared prompt includes ELI5-style examples and asks models to avoid em-dashes. The server also strips em-dashes from returned content as a final cleanup pass.
 

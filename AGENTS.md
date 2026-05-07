@@ -48,7 +48,7 @@ If `typecheck` fails because `.next/types/...` is missing while `next build` is 
 - Preserve the per-model style split:
   - GLM-5.1 replies in lowercase.
   - Kimi K2.6 replies in one short paragraph.
-  - MiniMax M2.5 replies normally.
+  - MiniMax M2.7 replies normally.
 - The prompt must tell models to never use em-dashes.
 - Keep the server-side `removeEmDashes` cleanup so the app enforces that rule even if a model ignores it.
 - Keep `reasoning: { enabled: false }` for Together requests unless there is a strong reason to change it. It helps avoid reasoning-only responses with no final content.

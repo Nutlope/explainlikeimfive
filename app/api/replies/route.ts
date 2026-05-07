@@ -95,7 +95,7 @@ const MODEL_STYLE_PROMPTS: Record<string, string> = {
     "Style for this reply: write entirely in lowercase, including the first word of sentences. You have access to a web search tool. Use it when the question depends on current events, recent facts, specific numbers, named sources, products, laws, prices, schedules, or anything you are not sure is timeless. If the answer is general and stable, you may answer without searching.",
   "moonshotai/Kimi-K2.6":
     "Style for this reply: be super succinct. Answer in exactly one short paragraph, ideally 3-5 sentences.",
-  "MiniMaxAI/MiniMax-M2.5": "Style for this reply: answer normally in the r/explainlikeimfive style.",
+  "MiniMaxAI/MiniMax-M2.7": "Style for this reply: answer normally in the r/explainlikeimfive style.",
 };
 
 const EXA_SEARCH_TOOL = {
@@ -118,7 +118,7 @@ const EXA_SEARCH_TOOL = {
 };
 
 function systemPromptForModel(modelId: string) {
-  return `${BASE_SYSTEM_PROMPT}\n\n${MODEL_STYLE_PROMPTS[modelId] ?? MODEL_STYLE_PROMPTS["MiniMaxAI/MiniMax-M2.5"]}`;
+  return `${BASE_SYSTEM_PROMPT}\n\n${MODEL_STYLE_PROMPTS[modelId] ?? MODEL_STYLE_PROMPTS["MiniMaxAI/MiniMax-M2.7"]}`;
 }
 
 function cleanQuestion(title: unknown) {
