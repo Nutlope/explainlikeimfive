@@ -23,7 +23,7 @@
 ## Tech Stack
 
 - Next.js [App Router](https://nextjs.org/docs/app) for the framework
-- Three OSS chat models through [Together AI](https://www.together.ai/) for ELI5 replies
+- Three OSS chat models through [Together AI](https://togetherai.link/?utm_source=explainlikeimfive&utm_medium=referral&utm_campaign=example-app) for ELI5 replies
 - [Exa](https://exa.ai/) for GLM-5.1 web search when questions need current information
 - [Upstash Redis](https://upstash.com/) for IP-based rate limiting
 - Browser `localStorage` for local-first post and reply persistence
@@ -33,7 +33,7 @@
 
 You can deploy this app to Vercel or any other Next.js host. Note that you&apos;ll need to:
 
-- Set up [Together AI](https://www.together.ai/) for model replies
+- Set up [Together AI](https://togetherai.link/?utm_source=explainlikeimfive&utm_medium=referral&utm_campaign=example-app) for model replies
 - Set up [Exa](https://exa.ai/) for GLM-5.1 web search
 - Set up [Upstash Redis](https://upstash.com/) for rate limiting
 - Set up [Vercel](https://vercel.com/) or another host for the Next.js app
@@ -132,7 +132,7 @@ Successful response:
 
 ## Credits
 
-- [Together AI](https://www.together.ai/) for OSS model inference
+- [Together AI](https://togetherai.link/?utm_source=explainlikeimfive&utm_medium=referral&utm_campaign=example-app) for OSS model inference
 - [Exa](https://exa.ai/) for web search
 - [Upstash](https://upstash.com/) for Redis-backed rate limiting
 - [Reddit&apos;s r/explainlikeimfive](https://www.reddit.com/r/explainlikeimfive/) for the product inspiration
