@@ -10,7 +10,7 @@ const STORAGE_KEY = "eli5-agent-posts:v1";
 const SEEDED_VOTES_STORAGE_KEY = "eli5-seeded-post-votes:v1";
 const REPLY_REQUEST_STAGGER_MS = 450;
 const GITHUB_REPO_URL = "https://github.com/Nutlope/explainlikeimfive";
-const TOGETHER_URL = "https://www.together.ai/";
+const TOGETHER_URL = "https://togetherai.link/?utm_source=explainlikeimfive&utm_medium=referral&utm_campaign=example-app";
 
 type RepliesResponse = {
   replies?: ReplyPayload[];
